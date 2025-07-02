@@ -1,0 +1,11 @@
+Flask==2.3.3
+Werkzeug==2.3.7
+SQLAlchemy==2.0.23
+fastapi==0.104.1
+uvicorn==0.24.0
+langchain
+langchain-openai
+openai
+pydantic==2.4.2
+python-multipart==0.0.6
+requests==2.31.0
