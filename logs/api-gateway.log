@@ -1,0 +1,34 @@
+INFO:__main__:Configured document service: http://localhost:5000
+INFO:__main__:Configured ai service: http://localhost:5100
+INFO:     Will watch for changes in these directories: ['/home/marce/code/CareDocQA/services/api-gateway']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [427257] using StatReload
+INFO:     Started server process [427261]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:app:Calling document service: GET http://localhost:5000/health
+INFO:app:Service document responded with status 200
+INFO:app:Calling ai service: GET http://localhost:5100/health
+INFO:app:Service ai responded with status 200
+INFO:     127.0.0.1:36910 - "GET /health HTTP/1.1" 200 OK
+INFO:app:Calling document service: GET http://localhost:5000/documents
+INFO:app:Service document responded with status 200
+INFO:     None:0 - "GET /documents HTTP/1.1" 200 OK
+INFO:app:Calling document service: GET http://localhost:5000/health
+INFO:app:Service document responded with status 200
+INFO:app:Calling ai service: GET http://localhost:5100/health
+INFO:app:Service ai responded with status 200
+INFO:     None:0 - "GET /health HTTP/1.1" 200 OK
+INFO:app:Calling document service: GET http://localhost:5000/documents
+INFO:app:Service document responded with status 200
+INFO:     None:0 - "GET /documents HTTP/1.1" 200 OK
+INFO:app:Calling document service: GET http://localhost:5000/health
+INFO:app:Service document responded with status 200
+INFO:app:Calling ai service: GET http://localhost:5100/health
+INFO:app:Service ai responded with status 200
+INFO:     None:0 - "GET /health HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [427261]
+INFO:     Stopping reloader process [427257]
