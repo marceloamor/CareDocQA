@@ -150,7 +150,7 @@ function App() {
     <div className="App">
       <header className="app-header">
         <h1>🏥 CareDocQA - Healthcare AI Assistant</h1>
-        <p>Upload care documents and ask intelligent questions powered by microservices</p>
+        <p>Upload care documents, ask intelligent questions, and pls give me a job!!</p>
       </header>
 
       <div className="app-content">

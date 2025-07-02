@@ -114,9 +114,28 @@ export OPENAI_API_KEY="your-openai-api-key-here"
 # Quick database reset
 python clear_database.py
 
-# Full restart
-Ctrl+C  # Stop services
+# Full restart (enhanced with port cleanup)
+Ctrl+C  # Stop services - now properly closes all ports!
 ./start_careDocQA.sh  # Restart everything
+
+# Emergency port cleanup (if needed)
+./kill_ports.sh
+```
+
+### **Port Management:**
+```bash
+# The startup script now has ENHANCED CLEANUP:
+# - Graceful shutdown with TERM signal
+# - Force kill with KILL signal  
+# - Process group termination
+# - Direct port cleanup with lsof
+# - Verification of port status
+
+# If ports are still stuck (backup method):
+./kill_ports.sh
+
+# Manual port check:
+lsof -ti :3000 :8000 :5100 :5000
 ```
 
 ### **Debug Issues:**
