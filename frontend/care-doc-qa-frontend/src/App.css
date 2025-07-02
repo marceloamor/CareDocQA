@@ -1,0 +1,419 @@
+/* HEALTHCARE-FOCUSED CSS STYLING */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  color: #333;
+}
+
+.App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* HEADER STYLING - like Flask's base template header */
+.app-header {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 1.5rem 2rem;
+  text-align: center;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+  border-bottom: 3px solid #4f46e5;
+}
+
+.app-header h1 {
+  color: #1e293b;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.app-header p {
+  color: #64748b;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+/* MAIN CONTENT LAYOUT - like Flask's two-column layout */
+.app-content {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.left-panel, .right-panel {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* COMPONENT SECTIONS - like Flask form styling */
+.upload-section, .document-selector, .system-status, .chat-section {
+  margin-bottom: 2rem;
+  background: rgba(248, 250, 252, 0.8);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid #e2e8f0;
+}
+
+.upload-section:last-child, .document-selector:last-child, .system-status:last-child {
+  margin-bottom: 0;
+}
+
+/* SECTION HEADERS */
+.upload-section h3, .document-selector h3, .system-status h3, .chat-section h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #1e293b;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+/* FILE UPLOAD STYLING - like Flask file input */
+.upload-area {
+  border: 2px dashed #4f46e5;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  background: rgba(79, 70, 229, 0.05);
+  transition: all 0.3s ease;
+}
+
+.upload-area:hover {
+  border-color: #3730a3;
+  background: rgba(79, 70, 229, 0.1);
+}
+
+.upload-area input[type="file"] {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: white;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.upload-area p {
+  color: #6b7280;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+/* DOCUMENT SELECTOR - like Flask select dropdown */
+.document-selector select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: white;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.document-selector select:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.document-preview {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.document-preview strong {
+  color: #374151;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.document-preview p {
+  color: #6b7280;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  background: rgba(249, 250, 251, 0.8);
+  padding: 0.75rem;
+  border-radius: 4px;
+  border-left: 3px solid #4f46e5;
+}
+
+/* SYSTEM STATUS INDICATORS */
+.status-indicator {
+  padding: 1rem;
+  border-radius: 8px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.status-indicator.healthy {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+}
+
+.status-indicator.degraded {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+}
+
+.status-indicator.unhealthy {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.3);
+}
+
+.status-indicator div {
+  margin: 0.25rem 0;
+}
+
+/* CHAT INTERFACE - like Dash callback displays */
+.chat-section {
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+  padding-right: 0.5rem;
+}
+
+/* Custom scrollbar for chat */
+.chat-messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* MESSAGE STYLING */
+.message {
+  margin-bottom: 1rem;
+  border-radius: 12px;
+  padding: 1rem;
+  max-width: 85%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.message-user {
+  background: linear-gradient(135deg, #4f46e5, #3730a3);
+  color: white;
+  margin-left: auto;
+  border-bottom-right-radius: 4px;
+}
+
+.message-ai {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  margin-right: auto;
+  border-bottom-left-radius: 4px;
+}
+
+.message-system {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+  margin: 0 auto;
+  text-align: center;
+  max-width: 70%;
+}
+
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  opacity: 0.8;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.message-content {
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+.message-metadata {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 0.85rem;
+  opacity: 0.9;
+  font-family: 'Monaco', 'Menlo', monospace;
+}
+
+/* CHAT INPUT - like Flask form input */
+.chat-input {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 0.875rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.chat-input input:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.chat-input input:disabled {
+  background: #f9fafb;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.chat-input button {
+  padding: 0.875rem 1.5rem;
+  background: linear-gradient(135deg, #4f46e5, #3730a3);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 100px;
+}
+
+.chat-input button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #3730a3, #312e81);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+
+.chat-input button:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* LOADING OVERLAY - like Flask loading spinner */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.loading-spinner {
+  background: white;
+  padding: 2rem 3rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* RESPONSIVE DESIGN - like Flask's mobile-friendly CSS */
+@media (max-width: 768px) {
+  .app-content {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .app-header {
+    padding: 1rem;
+  }
+  
+  .app-header h1 {
+    font-size: 2rem;
+  }
+  
+  .chat-section {
+    height: 400px;
+  }
+  
+  .message {
+    max-width: 95%;
+  }
+  
+  .chat-input {
+    flex-direction: column;
+  }
+  
+  .chat-input button {
+    width: 100%;
+  }
+}
+
+/* ACCESSIBILITY IMPROVEMENTS */
+button:focus, input:focus, select:focus {
+  outline: 2px solid #4f46e5;
+  outline-offset: 2px;
+}
+
+/* SMOOTH ANIMATIONS */
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+/* HEALTHCARE THEME COLORS */
+:root {
+  --healthcare-primary: #4f46e5;
+  --healthcare-secondary: #10b981;
+  --healthcare-warning: #f59e0b;
+  --healthcare-danger: #ef4444;
+  --healthcare-info: #3b82f6;
+}
