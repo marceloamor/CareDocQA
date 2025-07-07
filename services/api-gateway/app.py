@@ -184,20 +184,26 @@ async def chat_about_policies(request: ChatRequest) -> Dict[str, Any]:
                     chat_response += f"• {action}\n"
                 
                 chat_response += f"""
-**📋 INCIDENT REPORT GENERATED:**
-```json
-{analysis_data['incident_report']}
-```
-
-**📧 EMAILS GENERATED:**
+**📋 INCIDENT REPORT:**
+"""
+                # Format incident report as a clean list instead of raw JSON
+                for field, value in analysis_data['incident_report'].items():
+                    chat_response += f"• **{field}**: {value}\n"
+                
+                chat_response += f"""
+**📧 EMAILS TO SEND:**
 """
                 
                 for email in analysis_data['emails']:
+                    cc_info = f"CC: {', '.join(email['cc'])}" if email.get('cc') and email['cc'] else ""
                     chat_response += f"""
-**To: {email['recipient_type'].title()}**
+**To: {email['recipient_type'].upper()}**
 Subject: {email['subject']}
 Urgency: {email['urgency'].upper()}
-{email['body'][:200]}...
+{cc_info}
+
+{email['body']}
+
 ---
 """
                 

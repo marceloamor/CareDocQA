@@ -48,7 +48,7 @@ class IncidentProcessor:
             return []
     
     def _call_openai(self, messages: List[Dict], max_tokens: int = 2000) -> Dict:
-        """Make a call to OpenAI API"""
+        """Make a call to OpenAI API using GPT-4o for superior incident analysis"""
         try:
             headers = {
                 'Authorization': f'Bearer {app.config["OPENAI_API_KEY"]}',
@@ -56,7 +56,7 @@ class IncidentProcessor:
             }
             
             payload = {
-                'model': 'gpt-3.5-turbo',
+                'model': 'gpt-4o',
                 'messages': messages,
                 'max_tokens': max_tokens,
                 'temperature': 0.3,
@@ -71,11 +71,17 @@ class IncidentProcessor:
             
             if response.status_code == 200:
                 data = response.json()
+                
+                # Calculate cost for GPT-4o: $0.005/1K input + $0.015/1K output
+                input_cost = data['usage']['prompt_tokens'] * 0.005 / 1000
+                output_cost = data['usage']['completion_tokens'] * 0.015 / 1000
+                total_cost = input_cost + output_cost
+                
                 return {
                     'success': True,
                     'content': data['choices'][0]['message']['content'].strip(),
                     'tokens_used': data['usage']['total_tokens'],
-                    'cost': data['usage']['total_tokens'] * 0.0015 / 1000
+                    'cost': total_cost
                 }
             else:
                 return {
@@ -152,7 +158,7 @@ Ensure all responses are based strictly on the policies provided and the inciden
             {"role": "user", "content": analysis_prompt}
         ]
         
-        result = self._call_openai(messages, max_tokens=3000)
+        result = self._call_openai(messages, max_tokens=4000)
         
         if not result['success']:
             return {
@@ -161,8 +167,16 @@ Ensure all responses are based strictly on the policies provided and the inciden
             }
         
         try:
-            # Parse the JSON response
-            analysis_data = json.loads(result['content'])
+            # Clean the response - GPT-4o sometimes wraps JSON in markdown code blocks
+            content = result['content'].strip()
+            if content.startswith('```json'):
+                content = content[7:]  # Remove ```json
+            if content.endswith('```'):
+                content = content[:-3]  # Remove closing ```
+            content = content.strip()
+            
+            # Parse the cleaned JSON response
+            analysis_data = json.loads(content)
             
             return {
                 'success': True,
@@ -217,7 +231,7 @@ Please provide a helpful, accurate answer based on the policies above. Include s
             {"role": "user", "content": policy_prompt}
         ]
         
-        result = self._call_openai(messages, max_tokens=1000)
+        result = self._call_openai(messages, max_tokens=1500)
         
         if not result['success']:
             return {
@@ -269,7 +283,7 @@ Respond in JSON format:
             {"role": "user", "content": update_prompt}
         ]
         
-        result = self._call_openai(messages, max_tokens=2000)
+        result = self._call_openai(messages, max_tokens=3000)
         
         if not result['success']:
             return {
@@ -278,7 +292,16 @@ Respond in JSON format:
             }
         
         try:
-            update_data = json.loads(result['content'])
+            # Clean the response - GPT-4o sometimes wraps JSON in markdown code blocks
+            content = result['content'].strip()
+            if content.startswith('```json'):
+                content = content[7:]  # Remove ```json
+            if content.endswith('```'):
+                content = content[:-3]  # Remove closing ```
+            content = content.strip()
+            
+            # Parse the cleaned JSON response
+            update_data = json.loads(content)
             
             return {
                 'success': True,

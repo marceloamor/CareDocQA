@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# 🎯 Emma AI Assessment - Incident Response System Startup
+# Emma AI Assessment - Incident Response System Startup
 # AI-Enhanced Incident Response for Social Care
 # Assignment submission for founding engineer role
 
@@ -17,16 +17,16 @@ NC='\033[0m' # No Colour
 
 # ASCII Header
 echo -e "${CYAN}"
-echo "🎯 ==============================================="
+echo "==============================================="
 echo "   Emma AI Assessment - Incident Response"
 echo "   AI-Enhanced Social Care System"
 echo "===============================================${NC}"
 
-echo -e "${YELLOW}🏥 Assignment Submission${NC}"
-echo -e "${BLUE}⏳ Starting AI-Enhanced Incident Response System...${NC}"
+echo -e "${YELLOW}Assignment Submission${NC}"
+echo -e "${BLUE}Starting AI-Enhanced Incident Response System...${NC}"
 
 # Check prerequisites
-echo -e "\n${PURPLE}🔍 Checking Prerequisites...${NC}"
+echo -e "\n${PURPLE}Checking Prerequisites...${NC}"
 
 # Check Python virtual environment
 if [ ! -d "venv" ]; then
@@ -97,7 +97,7 @@ start_service() {
     local health_endpoint=$4
     local start_command=$5
     
-    echo -e "\n${BLUE}🚀 Starting $service_name...${NC}"
+    echo -e "\n${BLUE}Starting $service_name...${NC}"
     
     cd "$service_dir"
     nohup $start_command > "../../logs/${service_name}.log" 2>&1 &
@@ -137,7 +137,7 @@ start_service() {
 }
 
 # Start backend services
-echo -e "\n${CYAN}🔥 STARTING BACKEND SERVICES${NC}"
+echo -e "\n${CYAN}STARTING BACKEND SERVICES${NC}"
 
 # Start Incident Processor Service
 start_service "incident-processor" "services/incident-processor" 5001 "http://localhost:5001/health" "python app.py"
@@ -146,13 +146,13 @@ start_service "incident-processor" "services/incident-processor" 5001 "http://lo
 start_service "api-gateway" "services/api-gateway" 8000 "http://localhost:8000/health" "python app.py"
 
 # Start React Frontend
-echo -e "\n${CYAN}🔥 STARTING REACT FRONTEND${NC}"
+echo -e "\n${CYAN}STARTING REACT FRONTEND${NC}"
 
 cd frontend/care-doc-qa-frontend
 
 # Install npm dependencies if node_modules doesn't exist
 if [ ! -d "node_modules" ]; then
-    echo -e "${YELLOW}📦 Installing npm dependencies...${NC}"
+    echo -e "${YELLOW}Installing npm dependencies...${NC}"
     npm install --silent
     echo -e "${GREEN}✅ npm dependencies installed${NC}"
 else
@@ -160,7 +160,7 @@ else
 fi
 
 # Start React development server
-echo -e "\n${BLUE}🚀 Starting React Frontend...${NC}"
+echo -e "\n${BLUE}Starting React Frontend...${NC}"
 nohup npm start > "../../logs/react-frontend.log" 2>&1 &
 REACT_PID=$!
 
@@ -198,14 +198,14 @@ health_check "API Gateway" "http://localhost:8000/health"
 health_check "React Frontend" "http://localhost:3000"
 
 # Success message
-echo -e "\n${GREEN}🎉 AI-ENHANCED INCIDENT RESPONSE SYSTEM READY!${NC}"
-echo -e "\n${CYAN}📱 ACCESS POINTS:${NC}"
-echo -e "${YELLOW}   🌐 Main Application: http://localhost:3000${NC}"
-echo -e "${YELLOW}   🔧 API Gateway: http://localhost:8000${NC}"
-echo -e "${YELLOW}   📚 API Documentation: http://localhost:8000/docs${NC}"
-echo -e "${YELLOW}   🧠 Incident Processor: http://localhost:5001${NC}"
+echo -e "\n${GREEN}AI-ENHANCED INCIDENT RESPONSE SYSTEM READY!${NC}"
+echo -e "\n${CYAN}ACCESS POINTS:${NC}"
+echo -e "${YELLOW}   Main Application: http://localhost:3000${NC}"
+echo -e "${YELLOW}   API Gateway: http://localhost:8000${NC}"
+echo -e "${YELLOW}   API Documentation: http://localhost:8000/docs${NC}"
+echo -e "${YELLOW}   Incident Processor: http://localhost:5001${NC}"
 
-echo -e "\n${CYAN}🎯 ASSIGNMENT FEATURES:${NC}"
+echo -e "\n${CYAN}ASSIGNMENT FEATURES:${NC}"
 echo -e "${GREEN}   ✅ Policy-driven incident analysis${NC}"
 echo -e "${GREEN}   ✅ Automated incident report generation${NC}"
 echo -e "${GREEN}   ✅ Professional email drafting${NC}"
@@ -213,7 +213,7 @@ echo -e "${GREEN}   ✅ Natural language policy Q&A${NC}"
 echo -e "${GREEN}   ✅ Document editing with feedback${NC}"
 echo -e "${GREEN}   ✅ Cross-document consistency updates${NC}"
 
-echo -e "\n${CYAN}📝 HOW TO USE:${NC}"
+echo -e "\n${CYAN}HOW TO USE:${NC}"
 echo -e "${YELLOW}   1. Open http://localhost:3000 in your browser${NC}"
 echo -e "${YELLOW}   2. Ask policy questions or paste a call transcript${NC}"
 echo -e "${YELLOW}   3. System automatically analyzes and generates documents${NC}"
@@ -231,7 +231,7 @@ echo -e "\n${YELLOW}⏳ Monitoring services... (Press Ctrl+C to stop)${NC}"
 
 # Function to cleanup on exit
 cleanup() {
-    echo -e "\n${YELLOW}🧹 Stopping services...${NC}"
+    echo -e "\n${YELLOW}Stopping services...${NC}"
     
     # Kill all background processes started by this script
     jobs -p | xargs -r kill 2>/dev/null || true

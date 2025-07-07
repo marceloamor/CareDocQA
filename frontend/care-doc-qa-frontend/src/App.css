@@ -235,7 +235,7 @@ body {
   transform: translateY(-1px);
 }
 
-/* FILE UPLOAD STYLING - like Flask file input */
+/* FILE UPLOAD STYLING */
 .upload-area {
   border: 2px dashed #4f46e5;
   border-radius: 8px;
@@ -266,7 +266,7 @@ body {
   font-style: italic;
 }
 
-/* DOCUMENT SELECTOR - like Flask select dropdown */
+/* DOCUMENT SELECTOR */
 .document-selector select {
   width: 100%;
   padding: 0.75rem;
@@ -337,19 +337,24 @@ body {
   margin: 0.25rem 0;
 }
 
-/* CHAT INTERFACE - like Dash callback displays */
+/* CHAT INTERFACE */
 .chat-section {
-  height: 600px;
   display: flex;
   flex-direction: column;
   margin-bottom: 0;
 }
 
 .chat-messages {
-  flex: 1;
+  height: 450px;
+  min-height: 200px;
+  max-height: 800px;
+  resize: vertical;
   overflow-y: auto;
   margin-bottom: 1rem;
   padding-right: 0.5rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: rgba(248, 250, 252, 0.5);
 }
 
 /* Custom scrollbar for chat */
@@ -425,6 +430,32 @@ body {
 .message-content {
   line-height: 1.6;
   font-size: 1rem;
+}
+
+/* Enhanced formatting for incident analysis responses */
+.message-analysis .message-content h3,
+.message-analysis .message-content strong {
+  color: #fff;
+}
+
+.message-analysis .message-content code {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.125rem 0.25rem;
+  border-radius: 3px;
+  font-family: 'Monaco', 'Menlo', monospace;
+  font-size: 0.9rem;
+}
+
+/* Better spacing for analysis sections */
+.message-content h3 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.message-content h3:first-child {
+  margin-top: 0;
 }
 
 .message-metadata {
@@ -525,7 +556,7 @@ body {
   box-shadow: none;
 }
 
-/* LOADING OVERLAY - like Flask loading spinner */
+/* LOADING OVERLAY */
 .loading-overlay {
   position: fixed;
   top: 0;
@@ -546,7 +577,14 @@ body {
   font-weight: 600;
   font-size: 1.1rem;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
   animation: pulse 2s infinite;
+}
+
+.loading-spinner svg {
+  animation: spin 1s linear infinite;
 }
 
 @keyframes pulse {
@@ -554,7 +592,12 @@ body {
   50% { transform: scale(1.05); }
 }
 
-/* RESPONSIVE DESIGN - like Flask's mobile-friendly CSS */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* RESPONSIVE DESIGN */
 @media (max-width: 768px) {
   .app-content {
     grid-template-columns: 1fr;
@@ -570,8 +613,10 @@ body {
     font-size: 2rem;
   }
   
-  .chat-section {
-    height: 400px;
+  .chat-messages {
+    height: 300px;
+    min-height: 150px;
+    max-height: 500px;
   }
   
   .message {

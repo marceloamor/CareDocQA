@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import axios from 'axios';
-import { MessageCircle, FileText, Heart, AlertTriangle, Send, Edit3 } from 'lucide-react';
+import { MessageCircle, FileText, Heart, AlertTriangle, Send, Edit3, Loader, Mic } from 'lucide-react';
 import './App.css';
 
 function App() {
@@ -25,6 +25,9 @@ function App() {
   
   // Ref to ensure welcome message only appears once
   const welcomeMessageAdded = useRef(false);
+  
+  // Ref for chat messages container to enable auto-scroll
+  const chatMessagesRef = useRef(null);
 
   // API BASE URL
   const API_BASE = '';
@@ -70,11 +73,25 @@ You can:
 • Ask questions about social care policies
 • Paste call transcripts for automatic incident analysis
 • Get automated incident reports and email drafts
+• Ask follow-up questions about analyzed incidents
+• Edit generated documents with natural language feedback
 
-The system has all care policies loaded and ready. Try asking: "What should I do if someone falls repeatedly?"`);
+The system has all care policies loaded and ready. After analyzing a transcript, you can ask contextual follow-up questions like "Should we also notify the family?" or "What other assessments are needed?"
+
+Try asking: "What should I do if someone falls repeatedly?"`);
       welcomeMessageAdded.current = true;
     }
   }, [checkSystemHealth, addMessage]);
+
+  // Auto-scroll chat to bottom when new messages arrive
+  useEffect(() => {
+    if (chatMessagesRef.current) {
+      chatMessagesRef.current.scrollTo({
+        top: chatMessagesRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+  }, [messages]);
 
   const sendChatMessage = useCallback(async () => {
     if (!message.trim()) return;
@@ -326,7 +343,7 @@ ${data.updates.updated_document}
   return (
     <div className="App">
       <header className="app-header">
-        <h1>🚨 AI-Enhanced Incident Response System</h1>
+        <h1>AI-Enhanced Incident Response System</h1>
         <p>Social Care Incident Analysis • Policy Compliance • Automated Documentation</p>
       </header>
 
@@ -353,8 +370,8 @@ Greg Jones: 'Hi, I've fallen again...'
               disabled={isLoading || !transcript.trim()}
               className="analyze-button"
             >
-              <AlertTriangle size={16} />
-              {isLoading ? 'Analyzing...' : 'Analyze Incident'}
+              <Mic size={16} />
+              {isLoading ? 'Analyzing...' : 'Analyze Transcript'}
             </button>
             <p className="transcript-info">
               The system will analyze transcripts against all policies and generate required documents automatically.
@@ -370,6 +387,7 @@ Greg Jones: 'Hi, I've fallen again...'
                 <div>Incident Processor: {systemHealth.incident_processor?.status || 'unknown'}</div>
                 <div>Policies Loaded: {systemHealth.incident_processor?.policies_loaded ? '✅' : '❌'}</div>
                 <div>Active Session: {sessionContext.hasActiveIncident ? '🧠 Context Active' : '🔄 Fresh Session'}</div>
+                <div>Going to hire Marcelo: True</div>
                 <div>Cost Today: ${totalCost.toFixed(6)}</div>
               </div>
             ) : (
@@ -441,7 +459,7 @@ Greg Jones: 'Hi, I've fallen again...'
           <div className="chat-section">
             <h3><MessageCircle size={20} /> Policy Chat & Analysis</h3>
             
-            <div className="chat-messages">
+            <div className="chat-messages" ref={chatMessagesRef}>
               {messages.map(message => (
                 <div key={message.id} className={`message message-${message.type}`}>
                   <div className="message-header">
@@ -504,8 +522,8 @@ Greg Jones: 'Hi, I've fallen again...'
       {isLoading && (
         <div className="loading-overlay">
           <div className="loading-spinner">
-            <AlertTriangle size={24} />
-            Processing incident analysis...
+            <Loader size={24} />
+            Processing request...
           </div>
         </div>
       )}
