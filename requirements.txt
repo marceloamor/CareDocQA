@@ -1,4 +1,4 @@
-# AI-Enhanced Incident Response System Dependencies
+# System Dependencies
 
 # Flask for incident processor service
 Flask==2.3.3

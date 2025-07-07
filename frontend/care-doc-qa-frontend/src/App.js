@@ -11,14 +11,13 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);            // Loading state
   const [systemHealth, setSystemHealth] = useState(null);       // System health
   const [totalCost, setTotalCost] = useState(0);               // AI cost tracking
-  const [editingDocument, setEditingDocument] = useState(null); // Document being edited
-  const [editFeedback, setEditFeedback] = useState('');         // User feedback for edits
+
   
   // Session context for follow-up questions
   const [sessionContext, setSessionContext] = useState({
     hasActiveIncident: false,
     lastAnalysis: null,
-    incidentSummary: null,
+    incidentSummary: '',
     lastTranscriptTime: null,
     originalTranscript: null
   });
@@ -74,7 +73,6 @@ You can:
 • Paste call transcripts for automatic incident analysis
 • Get automated incident reports and email drafts
 • Ask follow-up questions about analyzed incidents
-• Edit generated documents with natural language feedback
 
 The system has all care policies loaded and ready. After analyzing a transcript, you can ask contextual follow-up questions like "Should we also notify the family?" or "What other assessments are needed?"
 
@@ -208,68 +206,7 @@ Try asking: "What should I do if someone falls repeatedly?"`);
     }
   }, [transcript, addMessage, API_BASE, totalCost, setSessionContext]);
 
-  const updateDocument = useCallback(async (documentType, currentContent, allDocuments) => {
-    if (!editFeedback.trim()) {
-      addMessage('system', 'Please provide feedback for how to improve the document.');
-      return;
-    }
 
-    setIsLoading(true);
-
-    try {
-      const response = await axios.post(`${API_BASE}/update`, {
-        feedback: editFeedback,
-        document_type: documentType,
-        current_content: currentContent,
-        all_documents: allDocuments
-      });
-
-      const data = response.data;
-      
-      if (data.updates.requires_cross_updates) {
-        addMessage('ai', `✅ Updated ${documentType} and related documents:
-
-**Primary Update:**
-${data.updates.updated_document}
-
-**Related Changes:**
-${data.updates.cross_updates.map(update => 
-  `• ${update.document_type}: ${update.reason}`
-).join('\n')}
-
-**Explanation:** ${data.updates.explanation}`, {
-        tokens: data.tokens_used,
-        cost: data.cost,
-        type: 'document_update'
-      });
-      } else {
-        addMessage('ai', `✅ Updated ${documentType}:
-
-${data.updates.updated_document}
-
-**Explanation:** ${data.updates.explanation}`, {
-          tokens: data.tokens_used,
-          cost: data.cost,
-          type: 'document_update'
-        });
-      }
-
-      // Update total cost
-      const newCost = totalCost + (data.cost || 0);
-      setTotalCost(newCost);
-      localStorage.setItem('totalCost', newCost.toString());
-
-      // Clear editing state
-      setEditingDocument(null);
-      setEditFeedback('');
-
-    } catch (error) {
-      console.error('Update failed:', error);
-      addMessage('system', `Update failed: ${error.response?.data?.error || error.message}`);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [editFeedback, addMessage, API_BASE, totalCost]);
 
   // FORMAT ANALYSIS RESPONSE
   const formatAnalysisResponse = (analysis) => {
@@ -324,15 +261,13 @@ ${data.updates.updated_document}
     }
   }, [sendChatMessage]);
 
-  const handleEditDocument = useCallback((documentType, content, allDocs) => {
-    setEditingDocument({ type: documentType, content, allDocuments: allDocs });
-  }, []);
+
 
   const clearSessionContext = useCallback(() => {
     setSessionContext({
       hasActiveIncident: false,
       lastAnalysis: null,
-      incidentSummary: null,
+      incidentSummary: '',
       lastTranscriptTime: null,
       originalTranscript: null
     });
@@ -423,35 +358,7 @@ Greg Jones: 'Hi, I've fallen again...'
             )}
           </div>
 
-          {/* EDIT DOCUMENT SECTION */}
-          {editingDocument && (
-            <div className="edit-section">
-              <h3><Edit3 size={20} /> Edit Document</h3>
-              <p>Editing: <strong>{editingDocument.type}</strong></p>
-              <textarea
-                value={editFeedback}
-                onChange={(e) => setEditFeedback(e.target.value)}
-                placeholder="How should this document be improved? (e.g., 'Make it more urgent', 'Add more detail about confusion')"
-                className="edit-feedback"
-                rows="3"
-              />
-              <div className="edit-buttons">
-                <button 
-                  onClick={() => updateDocument(editingDocument.type, editingDocument.content, editingDocument.allDocuments)}
-                  disabled={isLoading || !editFeedback.trim()}
-                  className="update-button"
-                >
-                  Update Document
-                </button>
-                <button 
-                  onClick={() => setEditingDocument(null)}
-                  className="cancel-button"
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          )}
+
         </div>
 
         <div className="right-panel">
@@ -474,17 +381,6 @@ Greg Jones: 'Hi, I've fallen again...'
                   </div>
                   {message.metadata && (
                     <div className="message-metadata">
-                      {message.metadata.type === 'transcript_analysis' && (
-                        <button 
-                          onClick={() => handleEditDocument('incident_report', 
-                            JSON.stringify(message.metadata.analysisData.incident_report, null, 2),
-                            message.metadata.analysisData
-                          )}
-                          className="edit-doc-button"
-                        >
-                          <Edit3 size={12} /> Edit Documents
-                        </button>
-                      )}
                       <span>
                         🎯 {message.metadata.tokens} tokens | 
                         💰 ${message.metadata.cost?.toFixed(6)}

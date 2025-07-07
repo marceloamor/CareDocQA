@@ -6,7 +6,7 @@
 ## 📋 **Quick Start**
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/marceloamor/CareDocQA
 cd CareDocQA
 python -m venv venv
 source venv/bin/activate
@@ -25,7 +25,7 @@ echo "OPENAI_API_KEY=your-openai-api-key-here" > .env
 
 ## 🚀 **System Overview**
 
-This is a sophisticated **AI-Enhanced Incident Response System** built for social care organisations. It analyses call transcripts against organisational policies, generates compliance reports, creates incident documentation, and drafts appropriate notifications—all powered by **GPT-4o** for superior reasoning and analysis.
+This is a sophisticated **AI-Enhanced Incident Response System** built for social care organisations. It analyses call transcripts against organisational policies, generates compliance reports, creates incident documentation, drafts appropriate notifications, and incorporates user feedback and follow-up questions, all powered by **GPT-4o**.
 
 ### **🎯 Core Capabilities:**
 - **📞 Transcript Analysis**: Smart detection and processing of call transcripts
@@ -33,8 +33,8 @@ This is a sophisticated **AI-Enhanced Incident Response System** built for socia
 - **📝 Document Generation**: Professional incident reports and forms
 - **📧 Email Drafting**: Contextual notifications to supervisors, families, and assessors
 - **💬 Contextual Conversations**: Follow-up questions with session memory
-- **✏️ Natural Language Editing**: Improve generated documents with feedback
-- **🔄 Cross-Document Consistency**: Updates maintain coherence across all documents
+
+
 
 ---
 
@@ -114,12 +114,7 @@ After transcript analysis, ask:
 → Contextual responses considering the specific incident
 ```
 
-### **4. Document Editing**
-```
-Click "Edit Documents" on any analysis
-Provide feedback: "Make the email more urgent"
-→ AI updates documents maintaining consistency
-```
+
 
 ---
 
@@ -166,9 +161,9 @@ CareDocQA/
 
 ## 🌟 **Alternative Demonstration**
 
-This repository also contains a **complete healthcare document Q&A system** on a separate branch that demonstrates broader microservice architecture capabilities.
+This repository also contains a **healthcare document Q&A system** on a separate branch that demonstrates broader microservice architecture capabilities.
 
-### **🔍 Explore the Full System**
+### **🔍 Explore the Previously Built System**
 ```bash
 git checkout full-careDocQA-system
 ./start_careDocQA.sh
@@ -186,7 +181,7 @@ git checkout full-careDocQA-system
 ## 🔧 **Development**
 
 ### **Prerequisites**
-- Python 3.8+
+- Python 3.11+
 - Node.js 18+
 - OpenAI API key
 
@@ -228,11 +223,3 @@ tail -f logs/react-frontend.log
 - **Health Monitoring**: Comprehensive system status tracking
 - **Error Resilience**: Graceful failure handling
 - **Scalable Architecture**: Ready for production deployment
-
----
-
-## 📞 **Questions or Feedback**
-
-This system demonstrates both **specific problem-solving** for the assignment requirements and **broader technical capabilities** for building production-grade healthcare AI systems.
-
-**Ready for your Emma AI founding engineer interview!** 🚀 

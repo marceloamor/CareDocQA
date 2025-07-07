@@ -19,7 +19,7 @@ app.config['OPENAI_API_BASE'] = 'https://api.openai.com/v1'
 
 # Load policy and form template on startup
 POLICIES_PATH = '../../assignment_materials/Policies and Procedures Dev Task.txt'
-FORM_TEMPLATE_PATH = '../../assignment_materials/Incident Report Form Dev Task - Sheet1.csv'
+FORM_TEMPLATE_PATH = '../../assignment_materials/Incident Report Form Dev Task.csv'
 
 class IncidentProcessor:
     def __init__(self):
