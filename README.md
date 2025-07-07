@@ -33,60 +33,57 @@ Port 3000                     Port 8000                   Document: 5000
 - OpenAI API key
 ```
 
-### **1. Backend Services Setup**
+### **1. One-Command Setup & Start**
 
 ```bash
-# 1. Clone and setup Python environment
+# 1. Clone and setup environment
+git clone https://github.com/marceloamor/CareDocQA
 cd CareDocQA
 python -m venv venv
 source venv/bin/activate  # Linux/Mac
-pip install -r requirements-document-service.txt
-pip install -r requirements-ai-service.txt  
-pip install -r requirements-api-gateway.txt
+pip install -r requirements.txt
 
 # 2. Configure OpenAI API key
 export OPENAI_API_KEY="your-openai-api-key-here"
+
+# 3. Start entire system (all 4 services automatically)
+./start_careDocQA.sh
 ```
 
-### **2. Start Backend Services (3 Terminal Windows)**
+**That's it! The start script automatically:**
+- ✅ Checks all prerequisites 
+- ✅ Installs npm dependencies if needed
+- ✅ Starts all 4 services in correct order
+- ✅ Waits for each service to be ready
+- ✅ Provides comprehensive monitoring
 
-**Terminal 1 - Document Service:**
+**Services will be running on:**
+- 🏥 **React Frontend**: http://localhost:3000
+- 🌐 **API Gateway**: http://localhost:8000 
+- 🤖 **AI Service**: http://localhost:5100
+- 📄 **Document Service**: http://localhost:5000
+
+### **2. Alternative: Manual Service Start (Development)**
+
+If you prefer to run services individually for development:
+
 ```bash
-source venv/bin/activate
-cd services/document-service  
-python app.py
-# ✅ Running on http://localhost:5000
+# Terminal 1 - Document Service
+source venv/bin/activate && cd services/document-service && python app.py
+
+# Terminal 2 - AI Service  
+source venv/bin/activate && cd services/ai-service && python app.py
+
+# Terminal 3 - API Gateway
+source venv/bin/activate && cd services/api-gateway && python app.py
+
+# Terminal 4 - React Frontend
+cd frontend/care-doc-qa-frontend && npm start
 ```
 
-**Terminal 2 - AI Service:**
+### **3. Test Complete System**
 ```bash
-source venv/bin/activate
-cd services/ai-service
-python app.py  
-# ✅ Running on http://localhost:5100
-```
-
-**Terminal 3 - API Gateway:**
-```bash  
-source venv/bin/activate
-cd services/api-gateway
-python app.py
-# ✅ Running on http://localhost:8000
-```
-
-### **3. Start React Frontend**
-
-**Terminal 4 - React App:**
-```bash
-cd frontend/care-doc-qa-frontend
-npm install  # Only needed first time
-npm start
-# ✅ Running on http://localhost:3000
-```
-
-### **4. Test Complete System**
-```bash
-# Run comprehensive test
+# Run comprehensive end-to-end test
 python test_frontend.py
 ```
 
