@@ -1,9 +1,9 @@
-# 🏥 AI-Enhanced Incident Response System
+# AI-Enhanced Incident Response System
 ### Emma AI - Founding Engineer Assessment Submission
 
 ---
 
-## 📋 **Quick Start**
+## **Quick Start**
 
 ```bash
 git clone https://github.com/marceloamor/CareDocQA
