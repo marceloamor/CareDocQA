@@ -1,12 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import axios from 'axios';
 import { MessageCircle, FileText, Heart, AlertTriangle, Send, Edit3 } from 'lucide-react';
 import './App.css';
 
-// Think of this like a Flask app with multiple routes
-// Each component is like a different route handler function
 function App() {
-  // STATE MANAGEMENT for incident response system
+  // State management for incident response system
   const [message, setMessage] = useState('');                    // Current chat input
   const [messages, setMessages] = useState([]);                 // Chat history
   const [transcript, setTranscript] = useState('');             // Transcript input area
@@ -15,11 +13,23 @@ function App() {
   const [totalCost, setTotalCost] = useState(0);               // AI cost tracking
   const [editingDocument, setEditingDocument] = useState(null); // Document being edited
   const [editFeedback, setEditFeedback] = useState('');         // User feedback for edits
+  
+  // Session context for follow-up questions
+  const [sessionContext, setSessionContext] = useState({
+    hasActiveIncident: false,
+    lastAnalysis: null,
+    incidentSummary: null,
+    lastTranscriptTime: null,
+    originalTranscript: null
+  });
+  
+  // Ref to ensure welcome message only appears once
+  const welcomeMessageAdded = useRef(false);
 
   // API BASE URL
   const API_BASE = '';
 
-  // UTILITY FUNCTION - Add message to chat (STABLE)
+  // Add message to chat interface
   const addMessage = useCallback((type, content, metadata = null) => {
     const newMessage = {
       id: Date.now(),
@@ -31,8 +41,7 @@ function App() {
     setMessages(prev => [...prev, newMessage]);
   }, []);
 
-  // API FUNCTIONS
-
+  // System health monitoring
   const checkSystemHealth = useCallback(async () => {
     try {
       const response = await axios.get(`${API_BASE}/health`);
@@ -43,7 +52,7 @@ function App() {
     }
   }, [API_BASE]);
 
-  // LIFECYCLE HOOK - runs when component loads
+  // Initialize application state and welcome message
   useEffect(() => {
     checkSystemHealth();
     
@@ -53,8 +62,9 @@ function App() {
       setTotalCost(parseFloat(savedCost));
     }
 
-    // Add welcome message
-    addMessage('system', `Welcome to the AI-Enhanced Incident Response System! 
+    // Add welcome message only once
+    if (!welcomeMessageAdded.current) {
+      addMessage('system', `Welcome to the AI-Enhanced Incident Response System! 
 
 You can:
 • Ask questions about social care policies
@@ -62,6 +72,8 @@ You can:
 • Get automated incident reports and email drafts
 
 The system has all care policies loaded and ready. Try asking: "What should I do if someone falls repeatedly?"`);
+      welcomeMessageAdded.current = true;
+    }
   }, [checkSystemHealth, addMessage]);
 
   const sendChatMessage = useCallback(async () => {
@@ -74,10 +86,22 @@ The system has all care policies loaded and ready. Try asking: "What should I do
     setIsLoading(true);
 
     try {
-      const response = await axios.post(`${API_BASE}/chat`, {
+      // Prepare request with session context if available
+      const requestPayload = {
         message: currentMessage
-      });
+      };
 
+      // Include session context for follow-up questions
+      if (sessionContext.hasActiveIncident && sessionContext.lastAnalysis) {
+        requestPayload.session_context = {
+          has_active_incident: true,
+          last_analysis: sessionContext.lastAnalysis,
+          incident_summary: sessionContext.incidentSummary,
+          original_transcript: sessionContext.originalTranscript
+        };
+      }
+
+      const response = await axios.post(`${API_BASE}/chat`, requestPayload);
       const data = response.data;
       
       if (data.type === 'transcript_analysis') {
@@ -88,12 +112,21 @@ The system has all care policies loaded and ready. Try asking: "What should I do
           cost: data.cost,
           type: 'transcript_analysis'
         });
+
+        // Update session context with new analysis
+        setSessionContext({
+          hasActiveIncident: true,
+          lastAnalysis: data.analysis_data,
+          incidentSummary: data.analysis_data.analysis.summary,
+          lastTranscriptTime: Date.now(),
+          originalTranscript: currentMessage
+        });
       } else {
-        // Handle policy question response
+        // Handle policy question response (including contextual follow-ups)
         addMessage('ai', data.message, {
           tokens: data.tokens_used,
           cost: data.cost,
-          type: 'policy_question'
+          type: data.type || 'policy_question'
         });
       }
 
@@ -108,7 +141,7 @@ The system has all care policies loaded and ready. Try asking: "What should I do
     } finally {
       setIsLoading(false);
     }
-  }, [message, addMessage, API_BASE, totalCost]);
+  }, [message, addMessage, API_BASE, totalCost, sessionContext]);
 
   const analyzeTranscript = useCallback(async () => {
     if (!transcript.trim()) {
@@ -136,6 +169,15 @@ The system has all care policies loaded and ready. Try asking: "What should I do
         type: 'direct_analysis'
       });
 
+      // Update session context with analysis
+      setSessionContext({
+        hasActiveIncident: true,
+        lastAnalysis: data.analysis,
+        incidentSummary: data.analysis.analysis.summary,
+        lastTranscriptTime: Date.now(),
+        originalTranscript: transcript
+      });
+
       // Update total cost
       const newCost = totalCost + (data.cost || 0);
       setTotalCost(newCost);
@@ -147,7 +189,7 @@ The system has all care policies loaded and ready. Try asking: "What should I do
     } finally {
       setIsLoading(false);
     }
-  }, [transcript, addMessage, API_BASE, totalCost]);
+  }, [transcript, addMessage, API_BASE, totalCost, setSessionContext]);
 
   const updateDocument = useCallback(async (documentType, currentContent, allDocuments) => {
     if (!editFeedback.trim()) {
@@ -269,6 +311,17 @@ ${data.updates.updated_document}
     setEditingDocument({ type: documentType, content, allDocuments: allDocs });
   }, []);
 
+  const clearSessionContext = useCallback(() => {
+    setSessionContext({
+      hasActiveIncident: false,
+      lastAnalysis: null,
+      incidentSummary: null,
+      lastTranscriptTime: null,
+      originalTranscript: null
+    });
+    addMessage('system', '🔄 Session context cleared. New questions will be treated as fresh inquiries.');
+  }, [addMessage]);
+
   // MAIN RENDER
   return (
     <div className="App">
@@ -316,10 +369,39 @@ Greg Jones: 'Hi, I've fallen again...'
                 <div>Overall: {systemHealth.overall?.status || 'unknown'}</div>
                 <div>Incident Processor: {systemHealth.incident_processor?.status || 'unknown'}</div>
                 <div>Policies Loaded: {systemHealth.incident_processor?.policies_loaded ? '✅' : '❌'}</div>
+                <div>Active Session: {sessionContext.hasActiveIncident ? '🧠 Context Active' : '🔄 Fresh Session'}</div>
                 <div>Cost Today: ${totalCost.toFixed(6)}</div>
               </div>
             ) : (
               <div className="status-indicator unhealthy">Checking...</div>
+            )}
+            
+            {sessionContext.hasActiveIncident && (
+              <div style={{ marginTop: '1rem', padding: '0.75rem', background: 'rgba(59, 130, 246, 0.1)', borderRadius: '6px', fontSize: '0.9rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                  <div style={{ flex: 1 }}>
+                    <strong>📋 Session Context:</strong><br />
+                    Last incident: {sessionContext.incidentSummary}<br />
+                    <em style={{ color: '#6b7280' }}>Follow-up questions will include this context</em>
+                  </div>
+                  <button 
+                    onClick={clearSessionContext}
+                    style={{ 
+                      marginLeft: '0.5rem', 
+                      padding: '0.25rem 0.5rem', 
+                      fontSize: '0.75rem', 
+                      background: '#ef4444', 
+                      color: 'white', 
+                      border: 'none', 
+                      borderRadius: '4px', 
+                      cursor: 'pointer',
+                      whiteSpace: 'nowrap'
+                    }}
+                  >
+                    Clear Context
+                  </button>
+                </div>
+              </div>
             )}
           </div>
 

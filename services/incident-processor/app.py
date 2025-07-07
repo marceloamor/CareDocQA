@@ -178,10 +178,30 @@ Ensure all responses are based strictly on the policies provided and the inciden
                 'raw_response': result['content']
             }
     
-    def answer_policy_question(self, question: str) -> Dict:
-        """Answer general questions about policies"""
+    def answer_policy_question(self, question: str, session_context: Dict = None) -> Dict:
+        """Answer policy questions, with optional session context for follow-ups"""
         
-        policy_prompt = f"""You are an AI assistant for social care policies and procedures.
+        if session_context and session_context.get('has_active_incident'):
+            # Contextual follow-up question
+            policy_prompt = f"""You are an AI assistant for social care policies and procedures with access to a recent incident analysis.
+
+POLICIES AND PROCEDURES:
+{self.policies_content}
+
+RECENT INCIDENT ANALYSIS CONTEXT:
+Summary: {session_context.get('incident_summary', 'No summary available')}
+
+Previous Analysis Results:
+{json.dumps(session_context.get('last_analysis', {}), indent=2)}
+
+FOLLOW-UP QUESTION: {question}
+
+Please answer this follow-up question considering the context of the recent incident analysis above. If the question relates to the analyzed incident, reference specific details and provide actionable guidance. If asking about additional requirements (like family notifications), check the policies and previous analysis to provide complete recommendations."""
+
+            system_message = "You are a knowledgeable social care policy advisor with access to recent incident context. Provide contextual, actionable answers that build on previous analysis."
+        else:
+            # Standard policy question without context
+            policy_prompt = f"""You are an AI assistant for social care policies and procedures.
 
 POLICIES AND PROCEDURES:
 {self.policies_content}
@@ -190,8 +210,10 @@ USER QUESTION: {question}
 
 Please provide a helpful, accurate answer based on the policies above. Include specific section references where relevant."""
 
+            system_message = "You are a knowledgeable social care policy advisor. Provide clear, accurate answers with policy references."
+
         messages = [
-            {"role": "system", "content": "You are a knowledgeable social care policy advisor. Provide clear, accurate answers with policy references."},
+            {"role": "system", "content": system_message},
             {"role": "user", "content": policy_prompt}
         ]
         
@@ -355,6 +377,7 @@ def chat_about_policies():
             }), 400
         
         question = data['question']
+        session_context = data.get('session_context')
         
         if not question.strip():
             return jsonify({
@@ -362,8 +385,8 @@ def chat_about_policies():
                 'error': 'Question cannot be empty'
             }), 400
         
-        # Answer the policy question
-        result = processor.answer_policy_question(question)
+        # Answer the policy question with optional context
+        result = processor.answer_policy_question(question, session_context)
         
         if not result['success']:
             return jsonify(result), 500

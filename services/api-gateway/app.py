@@ -37,6 +37,7 @@ SERVICE_TIMEOUT = 60  # Longer timeout for AI processing
 # Request/Response models
 class ChatRequest(BaseModel):
     message: str
+    session_context: Optional[Dict[str, Any]] = None
 
 class TranscriptAnalysisRequest(BaseModel):
     transcript: str
@@ -215,18 +216,25 @@ Urgency: {email['urgency'].upper()}
                 )
         
         else:
-            # Process as policy question
+            # Process as policy question (potentially with context)
+            request_data = {'question': message}
+            
+            # Include session context for follow-up questions
+            if request.session_context and request.session_context.get('has_active_incident'):
+                request_data['session_context'] = request.session_context
+                
             result = call_incident_processor(
                 '/chat',
                 'POST',
-                json={'question': message}
+                json=request_data
             )
             
             if result['success']:
+                response_type = 'contextual_followup' if request.session_context else 'policy_question'
                 return {
                     'success': True,
                     'message': result['data']['answer'],
-                    'type': 'policy_question',
+                    'type': response_type,
                     'tokens_used': result['data'].get('tokens_used', 0),
                     'cost': result['data'].get('cost', 0)
                 }

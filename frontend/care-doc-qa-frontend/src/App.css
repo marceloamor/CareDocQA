@@ -19,7 +19,7 @@ body {
   flex-direction: column;
 }
 
-/* HEADER STYLING - like Flask's base template header */
+/* Application header styling */
 .app-header {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
@@ -43,7 +43,7 @@ body {
   font-weight: 500;
 }
 
-/* MAIN CONTENT LAYOUT - like Flask's two-column layout */
+/* Main content layout */
 .app-content {
   flex: 1;
   display: grid;
@@ -64,7 +64,7 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* COMPONENT SECTIONS - like Flask form styling */
+/* Component sections */
 .transcript-section, .edit-section, .system-status, .chat-section {
   margin-bottom: 2rem;
   background: rgba(248, 250, 252, 0.8);
