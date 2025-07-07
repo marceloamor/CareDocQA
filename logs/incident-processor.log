@@ -1,0 +1,91 @@
+🧠 Starting Incident Processor Service...
+📋 Policies loaded: ✅
+📝 Form template loaded: ✅
+🚀 Service running on http://localhost:5001
+ * Serving Flask app 'app'
+ * Debug mode: on
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://172.26.105.74:5001
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 286-302-021
+127.0.0.1 - - [07/Jul/2025 23:21:34] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:21:35] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:21:45] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:21:46] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:21:46] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:21:46] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:21:51] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:21:51] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:21:56] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:21:56] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:22:01] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:22:01] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:22:06] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:22:06] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:22:11] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:22:11] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:22:17] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:22:17] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:22:22] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:22:22] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:22:27] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:22:27] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:22:32] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:22:32] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:22:37] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:22:37] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:22:42] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:22:42] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:22:47] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:22:47] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:22:53] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:22:53] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:22:58] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:22:58] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:23:03] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:23:03] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:23:08] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:23:08] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:23:13] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:23:13] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:23:18] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:23:18] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:23:24] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:23:24] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:23:29] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:23:29] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:23:34] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:23:34] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:23:39] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:23:39] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:23:44] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:23:44] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:23:49] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:23:49] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:23:54] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:23:54] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:24:00] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:24:00] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:24:05] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:24:05] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:24:10] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:24:10] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:24:15] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:24:15] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:24:20] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:24:20] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:24:25] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [07/Jul/2025 23:24:25] "GET /health HTTP/1.1" 200 -
+Exception ignored in: <function Popen.__del__ at 0x7d3f4bbf0220>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/subprocess.py", line 1120, in __del__
+    def __del__(self, _maxsize=sys.maxsize, _warn=warnings.warn):
+
+  File "/home/marce/code/CareDocQA/venv/lib/python3.12/site-packages/werkzeug/_reloader.py", line 452, in <lambda>
+    signal.signal(signal.SIGTERM, lambda *args: sys.exit(0))
+                                                ^^^^^^^^^^^
+SystemExit: 0

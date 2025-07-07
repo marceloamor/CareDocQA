@@ -3,25 +3,21 @@ import axios from 'axios';
 import { MessageCircle, FileText, Heart } from 'lucide-react';
 import './App.css';
 
-// Think of this like a Flask app with multiple routes
-// Each component is like a different route handler function
+// Healthcare document Q&A system with AI-powered analysis
 function App() {
-  // STATE MANAGEMENT - like Python variables that trigger UI updates
-  // In Flask/Dash, changing a variable and returning it updates the display
-  // In React, useState() does the same thing automatically
-  
-  const [documents, setDocuments] = useState([]);           // Like: documents = []
-  const [selectedDocument, setSelectedDocument] = useState(null);  // Like: selected_doc = None
-  const [question, setQuestion] = useState('');             // Like: question = ""
-  const [messages, setMessages] = useState([]);             // Like: messages = []
-  const [isLoading, setIsLoading] = useState(false);        // Like: is_loading = False
-  const [systemHealth, setSystemHealth] = useState(null);   // Like: health = None
-  const [totalCost, setTotalCost] = useState(0);           // Like: total_cost = 0.0
+  // State management for application components
+  const [documents, setDocuments] = useState([]);           // Available documents
+  const [selectedDocument, setSelectedDocument] = useState(null);  // Currently selected document
+  const [question, setQuestion] = useState('');             // User question input
+  const [messages, setMessages] = useState([]);             // Chat conversation history
+  const [isLoading, setIsLoading] = useState(false);        // Loading state for async operations
+  const [systemHealth, setSystemHealth] = useState(null);   // System health monitoring
+  const [totalCost, setTotalCost] = useState(0);           // API usage cost tracking
 
-  // API BASE URL - like your Flask app URL
+  // API base URL configuration
   const API_BASE = '';
 
-  // UTILITY FUNCTION - like a Python helper function (STABLE)
+  // Utility function for adding messages to chat interface
   const addMessage = useCallback((type, content, metadata = null) => {
     const newMessage = {
       id: Date.now(),
@@ -30,13 +26,13 @@ function App() {
       metadata,
       timestamp: new Date().toLocaleTimeString()
     };
-    setMessages(prev => [...prev, newMessage]); // Like: messages.append(new_message)
+    setMessages(prev => [...prev, newMessage]);
   }, []);
 
-  // API FUNCTIONS - like Python requests.get/post functions
+  // Document management functions
   
   const loadDocuments = useCallback(async () => {
-    // This is like: response = requests.get(f"{base_url}/documents")
+    // Fetch available documents from document service
     try {
       const response = await axios.get(`${API_BASE}/documents`);
       setDocuments(response.data.documents || []);
@@ -47,7 +43,7 @@ function App() {
   }, [API_BASE, addMessage]);
 
   const checkSystemHealth = useCallback(async () => {
-    // Like: health_response = requests.get(f"{base_url}/health")
+    // Monitor system health across all microservices
     try {
       const response = await axios.get(`${API_BASE}/health`);
       setSystemHealth(response.data);
@@ -57,21 +53,20 @@ function App() {
     }
   }, [API_BASE]);
 
-  // LIFECYCLE HOOK - like @app.before_first_request in Flask
-  // This runs when the component first loads (like app startup)
+  // Component initialization and setup
   useEffect(() => {
     loadDocuments();
     checkSystemHealth();
     
-    // Load saved cost from localStorage (like session storage)
+    // Restore cost tracking from localStorage
     const savedCost = localStorage.getItem('totalCost');
     if (savedCost) {
       setTotalCost(parseFloat(savedCost));
     }
-  }, [loadDocuments, checkSystemHealth]); // Now includes dependencies
+  }, [loadDocuments, checkSystemHealth]);
 
   const uploadDocument = useCallback(async (file) => {
-    // Like: requests.post(url, files={'file': file})
+    // Handle document upload to document service
     const formData = new FormData();
     formData.append('file', file);
     
@@ -132,25 +127,23 @@ function App() {
     }
   }, [selectedDocument, question, addMessage, API_BASE, totalCost]);
 
-  // Handle input change (STABLE)
+  // Event handlers for user interactions
   const handleQuestionChange = useCallback((e) => {
     setQuestion(e.target.value);
   }, []);
 
-  // Handle key press (STABLE)
   const handleKeyPress = useCallback((e) => {
     if (e.key === 'Enter') {
       askQuestion();
     }
   }, [askQuestion]);
 
-  // MAIN RENDER - like Flask's render_template()
-  // This is what gets displayed to the user
+  // Main component render
   return (
     <div className="App">
       <header className="app-header">
         <h1>🏥 CareDocQA - Healthcare AI Assistant</h1>
-        <p>Upload care documents, ask intelligent questions, and pls give me a job!!</p>
+        <p>Upload care documents and ask intelligent questions with AI-powered analysis</p>
       </header>
 
       <div className="app-content">
@@ -215,7 +208,7 @@ function App() {
         </div>
 
         <div className="right-panel">
-          {/* CHAT INTERFACE - FIXED VERSION */}
+          {/* Chat interface */}
           <div className="chat-section">
             <h3><MessageCircle size={20} /> Ask Questions</h3>
             

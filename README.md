@@ -2,9 +2,9 @@
 
 ## 🎯 **Project Overview**
 
-CareDocQA is a **microservice-based healthcare AI assistant** that demonstrates enterprise-level architecture for a technical interview. Healthcare professionals can upload care documents and ask natural language questions powered by GPT-3.5-turbo.
+CareDocQA is a **microservice-based healthcare AI assistant** that demonstrates enterprise-level architecture. Healthcare professionals can upload care documents and ask natural language questions powered by GPT-3.5-turbo.
 
-### **🏗️ Architecture - Perfect for Emma AI Interview**
+### **🏗️ System Architecture**
 
 ```
 Frontend (React)     ←→    API Gateway (FastAPI)    ←→    Microservices
@@ -12,7 +12,7 @@ Port 3000                     Port 8000                   Document: 5000
                                                          AI Service: 5100
 ```
 
-**Key Interview Points:**
+**Key Technical Features:**
 - ✅ **Microservice Architecture** - Service separation & communication
 - ✅ **API Gateway Pattern** - Request orchestration & routing  
 - ✅ **Full-Stack Development** - React frontend + Python backend
@@ -28,7 +28,7 @@ Port 3000                     Port 8000                   Document: 5000
 ### **Prerequisites**
 ```bash
 # Required software
-- Python 3.8+ 
+- Python 3.11+ 
 - Node.js 18+
 - OpenAI API key
 ```
@@ -85,100 +85,6 @@ cd frontend/care-doc-qa-frontend && npm start
 ```bash
 # Run comprehensive end-to-end test
 python test_frontend.py
-```
-
----
-
-## 🧠 **React for Python Developers - Complete Guide**
-
-### **Core Concept Mappings**
-
-| **Python/Flask Concept** | **React Equivalent** | **Example** |
-|--------------------------|---------------------|-------------|
-| `app.py` | `App.js` | Main application file |
-| `@app.route()` | Component functions | Route handlers → Components |
-| `render_template()` | `return <JSX>` | HTML templating |
-| `request.form['name']` | `useState()` | Form data management |
-| `requests.get/post()` | `axios.get/post()` | API calls |
-| Jinja2 `{{ variable }}` | JSX `{variable}` | Variable interpolation |
-| Flask sessions | `localStorage` | Client-side storage |
-
-### **State Management = Python Variables with Auto-Updates**
-
-```python
-# Python/Flask - Manual updates
-user_input = ""
-documents = []
-messages = []
-
-def update_page():
-    return render_template('index.html', 
-                         input=user_input, 
-                         docs=documents, 
-                         msgs=messages)
-
-# React - Automatic updates
-const [userInput, setUserInput] = useState("");     // user_input = ""
-const [documents, setDocuments] = useState([]);     // documents = []  
-const [messages, setMessages] = useState([]);       // messages = []
-
-// When you call setUserInput("new value"), UI automatically re-renders!
-```
-
-### **React Components = Python Functions**
-
-```python
-# Python function returning HTML
-def render_upload_form(disabled=False):
-    return f'''
-    <div class="upload-section">
-        <h3>Upload Document</h3>
-        <input type="file" {'disabled' if disabled else ''}>
-    </div>
-    '''
-
-# React component (same concept!)
-const FileUpload = ({ disabled = false }) => (
-    <div className="upload-section">
-        <h3>Upload Document</h3>
-        <input type="file" disabled={disabled} />
-    </div>
-);
-```
-
-### **useEffect = Flask Startup Functions**
-
-```python  
-# Flask - Run on app startup
-@app.before_first_request
-def startup():
-    load_documents()
-    check_health()
-    setup_logging()
-
-# React - Run when component loads
-useEffect(() => {
-    loadDocuments();
-    checkHealth();
-    setupLogging();
-}, []); // Empty array = run once on startup
-```
-
-### **API Calls = Python requests**
-
-```python
-# Python requests
-import requests
-
-response = requests.post('http://localhost:8000/upload', 
-                        files={'file': file})
-data = response.json()
-
-# React axios (identical concept!)
-import axios from 'axios';
-
-const response = await axios.post('/upload', formData);
-const data = response.data;
 ```
 
 ---
@@ -261,7 +167,7 @@ curl -X POST -F "file=@sample_documents/care_plan.txt" \
 
 ---
 
-## 🎯 **Interview Talking Points**
+## 🎯 **Technical Highlights**
 
 ### **Microservice Benefits Demonstrated**
 1. **Service Independence** - Each service can be deployed/scaled separately
@@ -280,6 +186,16 @@ curl -X POST -F "file=@sample_documents/care_plan.txt" \
 2. **Natural Language** - Questions in plain English about care procedures  
 3. **Cost Management** - AI usage tracking for budget control
 4. **Professional UI** - Healthcare-appropriate interface design
+
+### **Architectural Design for RAG Extension**
+The current **UUID-based document selection** architecture was deliberately chosen to facilitate future **RAG (Retrieval-Augmented Generation)** implementation:
+
+- **Current Approach**: Users select specific documents before querying, sending only relevant content to the LLM
+- **RAG Compatibility**: This mimics how RAG systems work - retrieving specific relevant documents rather than sending entire document collections
+- **Scalability**: An architecture that sends all documents to the LLM would hit context window limits and be difficult to extend to RAG
+- **Easy Migration Path**: The existing document selection pattern directly translates to RAG document retrieval, requiring minimal architectural changes
+
+This design demonstrates **forward-thinking system architecture** that anticipates scaling challenges and emerging AI patterns.
 
 ---
 
@@ -303,11 +219,6 @@ curl -X POST -F "file=@sample_documents/care_plan.txt" \
 - Data encryption at rest and in transit
 - User access controls and permissions
 
----
-
-## 📞 **Support & Questions**
-
-This project demonstrates enterprise-level microservice architecture with healthcare domain expertise, perfect for technical interviews in the AI/healthcare space.
 
 **Key URLs:**
 - 🌐 Frontend: http://localhost:3000
@@ -318,4 +229,4 @@ This project demonstrates enterprise-level microservice architecture with health
 
 ---
 
-**Happy coding! 🚀 Perfect for Emma AI interview! 🏥** 
+**Technical demonstration ready for production deployment and enterprise scaling.** 
