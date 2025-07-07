@@ -19,26 +19,26 @@ echo "OPENAI_API_KEY=your-openai-api-key-here" > .env
 ./start_assessment.sh
 ```
 
-**🌐 Access the system at:** http://localhost:3000
+**Access the system at:** http://localhost:3000
 
 ---
 
-## 🚀 **System Overview**
+## **System Overview**
 
 This is a sophisticated **AI-Enhanced Incident Response System** built for social care organisations. It analyses call transcripts against organisational policies, generates compliance reports, creates incident documentation, drafts appropriate notifications, and incorporates user feedback and follow-up questions, all powered by **GPT-4o**.
 
-### **🎯 Core Capabilities:**
-- **📞 Transcript Analysis**: Smart detection and processing of call transcripts
-- **📋 Policy Compliance**: Automatic analysis against loaded care policies  
-- **📝 Document Generation**: Professional incident reports and forms
-- **📧 Email Drafting**: Contextual notifications to supervisors, families, and assessors
-- **💬 Contextual Conversations**: Follow-up questions with session memory
+### **Core Capabilities:**
+- **Transcript Analysis**: Smart detection and processing of call transcripts
+- **Policy Compliance**: Automatic analysis against loaded care policies  
+- **Document Generation**: Professional incident reports and forms
+- **Email Drafting**: Contextual notifications to supervisors, families, and assessors
+- **Contextual Conversations**: Follow-up questions with session memory
 
 
 
 ---
 
-## 🏗️ **Architecture**
+## **Architecture**
 
 ```
 ┌─────────────────┐    ┌──────────────────┐    ┌─────────────────────┐
@@ -61,28 +61,28 @@ This is a sophisticated **AI-Enhanced Incident Response System** built for socia
 
 ---
 
-## ✨ **Key Features**
+## **Key Features**
 
-### **🧠 Intelligent Session Management**
+### **Intelligent Session Management**
 - **Contextual Memory**: System remembers previous transcript analysis
 - **Follow-up Questions**: Ask "Should we notify the family?" after incident analysis
 - **Session Indicators**: Clear UI showing when context is active
 - **Fresh Start**: Page refresh clears session for new scenarios
 
-### **📋 Advanced Document Processing**
+### **Advanced Document Processing**
 - **Smart Detection**: Automatically identifies transcripts vs policy questions
 - **Structured Generation**: Clean, professional incident reports
 - **Complete Email Content**: No truncation, full professional emails
 - **Natural Language Editing**: "Make this more urgent" or "Add family contact details"
 
-### **🎨 Professional UI/UX**
+### **Professional UI/UX**
 - **Resizable Components**: Chat and input areas resize like text editors
 - **Auto-scrolling Chat**: Immediately shows AI responses
 - **Loading States**: Professional spinner with appropriate messaging
 - **Visual Context**: Session state clearly indicated
 - **Cost Tracking**: Real-time OpenAI usage monitoring
 
-### **🔧 Production-Ready Features**
+### **Production-Ready Features**
 - **Health Monitoring**: All services report status and readiness
 - **Error Handling**: Graceful degradation with informative messages
 - **Logging**: Comprehensive request/response logging
@@ -91,7 +91,7 @@ This is a sophisticated **AI-Enhanced Incident Response System** built for socia
 
 ---
 
-## 📖 **How to Use**
+## **How to Use**
 
 ### **1. Basic Policy Questions**
 ```
@@ -118,7 +118,7 @@ After transcript analysis, ask:
 
 ---
 
-## 🎯 **Assignment Requirements Fulfilled**
+## **Assignment Requirements Fulfilled**
 
 | Requirement | Implementation | Status |
 |-------------|----------------|--------|
@@ -139,46 +139,46 @@ After transcript analysis, ask:
 
 ---
 
-## 📁 **Project Structure**
+## **Project Structure**
 
 ```
 CareDocQA/
-├── 🧠 services/
+├── services/
 │   ├── api-gateway/           # FastAPI service orchestration
 │   └── incident-processor/    # Flask AI analysis service
-├── ⚛️ frontend/
+├── frontend/
 │   └── care-doc-qa-frontend/  # React application
-├── 📄 assignment_materials/   # Policies, transcript, form template
-├── 🔧 venv/                  # Python virtual environment
-├── 📊 logs/                  # Service logs (auto-generated)
-├── ⚙️ .env                   # Environment configuration
-├── 📋 requirements.txt       # Python dependencies
-├── 🚀 start_assessment.sh    # One-command startup script
-└── 🧹 kill_ports.sh         # Cleanup script
+├── assignment_materials/   # Policies, transcript, form template
+├── venv/                  # Python virtual environment
+├── logs/                  # Service logs (auto-generated)
+├── .env                   # Environment configuration
+├── requirements.txt       # Python dependencies
+├── start_assessment.sh    # One-command startup script
+└── kill_ports.sh         # Cleanup script
 ```
 
 ---
 
-## 🌟 **Alternative Demonstration**
+## **Alternative Demonstration**
 
 This repository also contains a **healthcare document Q&A system** on a separate branch that demonstrates broader microservice architecture capabilities.
 
-### **🔍 Explore the Previously Built System**
+### **Explore the Previously Built System**
 ```bash
 git checkout full-careDocQA-system
 ./start_careDocQA.sh
 ```
 
 **The full system demonstrates:**
-- 🏗️ **4-service microservice architecture**
-- 🗄️ **Document storage and retrieval**
-- 🔍 **Semantic search across healthcare documents**
-- 📊 **Advanced monitoring and analytics**
-- 🐳 **Docker containerisation readiness**
+- **4-service microservice architecture**
+- **Document storage and retrieval**
+- **Semantic search across healthcare documents**
+- **Advanced monitoring and analytics**
+- **Docker containerisation readiness**
 
 ---
 
-## 🔧 **Development**
+## **Development**
 
 ### **Prerequisites**
 - Python 3.11+
