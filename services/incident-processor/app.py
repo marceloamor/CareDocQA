@@ -4,7 +4,11 @@ import csv
 import requests
 from datetime import datetime
 from flask import Flask, request, jsonify
+from dotenv import load_dotenv
 from typing import Dict, List, Any, Optional
+
+# Load environment variables from root directory
+load_dotenv('../../.env')
 
 # Initialize Flask app
 app = Flask(__name__)

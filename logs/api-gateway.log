@@ -1,34 +1,149 @@
-INFO:__main__:Configured document service: http://localhost:5000
-INFO:__main__:Configured ai service: http://localhost:5100
-INFO:     Will watch for changes in these directories: ['/home/marce/code/CareDocQA/services/api-gateway']
-INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [53429] using StatReload
-INFO:     Started server process [53433]
+INFO:     Started server process [59127]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-INFO:app:Calling document service: GET http://localhost:5000/health
-INFO:app:Service document responded with status 200
-INFO:app:Calling ai service: GET http://localhost:5100/health
-INFO:app:Service ai responded with status 200
-INFO:     127.0.0.1:47942 - "GET /health HTTP/1.1" 200 OK
-INFO:app:Calling document service: GET http://localhost:5000/documents
-INFO:app:Service document responded with status 200
-INFO:     None:0 - "GET /documents HTTP/1.1" 200 OK
-INFO:app:Calling document service: GET http://localhost:5000/health
-INFO:app:Service document responded with status 200
-INFO:app:Calling ai service: GET http://localhost:5100/health
-INFO:app:Service ai responded with status 200
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+🌐 Starting Incident Response API Gateway...
+🚀 Gateway running on http://localhost:8000
+📚 API docs available at http://localhost:8000/docs
+INFO:     127.0.0.1:33798 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
 INFO:     None:0 - "GET /health HTTP/1.1" 200 OK
-INFO:app:Calling document service: GET http://localhost:5000/health
-INFO:app:Service document responded with status 200
-INFO:app:Calling ai service: GET http://localhost:5100/health
-INFO:app:Service ai responded with status 200
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
 INFO:     None:0 - "GET /health HTTP/1.1" 200 OK
-INFO:app:Calling document service: GET http://localhost:5000/documents
-INFO:app:Service document responded with status 200
-INFO:     None:0 - "GET /documents HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:38274 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:38278 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:50594 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:50600 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:54714 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Processing chat message: When do the policies dictate for an email to be se...
+INFO:__main__:Calling incident processor: POST http://localhost:5001/chat
+INFO:__main__:Incident processor responded with status 200
+INFO:     None:0 - "POST /chat HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:54732 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:44756 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:34686 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:34702 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:54858 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:54870 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:33558 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:33570 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:60254 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:60262 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Processing chat message: Telephone Call Transcript
+Julie Peaterson: "Good m...
+INFO:__main__:Calling incident processor: POST http://localhost:5001/analyze
+INFO:__main__:Incident processor responded with status 200
+INFO:     None:0 - "POST /chat HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:54712 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:54728 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:40084 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:40100 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:43930 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:43932 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:60194 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:60202 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:48370 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:48376 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:36400 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:36404 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:54670 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:54684 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:51524 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:51532 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:46722 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:46726 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:44708 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:44716 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:41950 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:41962 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:42428 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:42434 - "GET /health HTTP/1.1" 200 OK
+INFO:__main__:Calling incident processor: GET http://localhost:5001/health
+INFO:__main__:Incident processor responded with status 200
+INFO:     127.0.0.1:56098 - "GET /health HTTP/1.1" 200 OK
 INFO:     Shutting down
 INFO:     Waiting for application shutdown.
 INFO:     Application shutdown complete.
-INFO:     Finished server process [53433]
-INFO:     Stopping reloader process [53429]
+INFO:     Finished server process [59127]

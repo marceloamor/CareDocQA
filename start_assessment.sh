@@ -41,13 +41,17 @@ fi
 source venv/bin/activate
 echo -e "${GREEN}✅ Virtual environment activated${NC}"
 
-# Check OpenAI API key
-if [ -z "$OPENAI_API_KEY" ]; then
-    echo -e "${RED}❌ OpenAI API key not set. Please run:${NC}"
-    echo -e "${YELLOW}   export OPENAI_API_KEY='your-api-key-here'${NC}"
+# Check OpenAI API key (from .env file or environment)
+if [ -f ".env" ] && grep -q "OPENAI_API_KEY=" .env; then
+    echo -e "${GREEN}✅ OpenAI API key found in .env file${NC}"
+elif [ -n "$OPENAI_API_KEY" ]; then
+    echo -e "${GREEN}✅ OpenAI API key configured in environment${NC}"
+else
+    echo -e "${RED}❌ OpenAI API key not found. Please:${NC}"
+    echo -e "${YELLOW}   1. Add OPENAI_API_KEY=your-key to .env file, OR${NC}"
+    echo -e "${YELLOW}   2. Run: export OPENAI_API_KEY='your-api-key-here'${NC}"
     exit 1
 fi
-echo -e "${GREEN}✅ OpenAI API key configured${NC}"
 
 # Check if Node.js is installed
 if ! command -v node &> /dev/null; then
