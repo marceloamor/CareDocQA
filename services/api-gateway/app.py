@@ -2,13 +2,11 @@ import os
 import requests
 from datetime import datetime
 from typing import Dict, Any, Optional
-from fastapi import FastAPI, HTTPException, UploadFile, File, Form
+from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
-from dotenv import load_dotenv
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 import logging
-
-# Load environment variables
-load_dotenv()
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -16,53 +14,61 @@ logger = logging.getLogger(__name__)
 
 # Initialize FastAPI app
 app = FastAPI(
-    title="CareDocQA API Gateway",
-    description="Microservice orchestration layer for healthcare document Q&A system",
+    title="Incident Response API Gateway",
+    description="AI-Enhanced Social Care Incident Response System",
     version="1.0.0",
-    docs_url="/docs",  # Swagger UI at /docs
-    redoc_url="/redoc"  # ReDoc at /redoc
+    docs_url="/docs",
+    redoc_url="/redoc"
+)
+
+# Add CORS middleware for React frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # React dev server
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Service configuration
-SERVICES = {
-    'document': {
-        'url': os.getenv('DOCUMENT_SERVICE_URL', 'http://localhost:5000'),
-        'timeout': 30
-    },
-    'ai': {
-        'url': os.getenv('AI_SERVICE_URL', 'http://localhost:5100'),
-        'timeout': 60  # Longer timeout for AI processing
-    }
-}
+INCIDENT_PROCESSOR_URL = os.getenv('INCIDENT_PROCESSOR_URL', 'http://localhost:5001')
+SERVICE_TIMEOUT = 60  # Longer timeout for AI processing
 
-def call_service(service_name: str, endpoint: str, method: str = 'GET', **kwargs) -> Dict[str, Any]:
+# Request/Response models
+class ChatRequest(BaseModel):
+    message: str
+
+class TranscriptAnalysisRequest(BaseModel):
+    transcript: str
+
+class DocumentUpdateRequest(BaseModel):
+    feedback: str
+    document_type: str
+    current_content: str
+    all_documents: Dict[str, Any]
+
+def call_incident_processor(endpoint: str, method: str = 'GET', **kwargs) -> Dict[str, Any]:
     """
-    Generic service caller with error handling and circuit breaker patterns
+    Call the incident processor service with error handling
     """
-    service_config = SERVICES.get(service_name)
-    if not service_config:
-        raise HTTPException(status_code=500, detail=f"Unknown service: {service_name}")
-    
-    url = f"{service_config['url']}{endpoint}"
-    timeout = service_config['timeout']
+    url = f"{INCIDENT_PROCESSOR_URL}{endpoint}"
     
     try:
-        logger.info(f"Calling {service_name} service: {method} {url}")
+        logger.info(f"Calling incident processor: {method} {url}")
         
         if method.upper() == 'GET':
-            response = requests.get(url, timeout=timeout, **kwargs)
+            response = requests.get(url, timeout=SERVICE_TIMEOUT, **kwargs)
         elif method.upper() == 'POST':
-            response = requests.post(url, timeout=timeout, **kwargs)
+            response = requests.post(url, timeout=SERVICE_TIMEOUT, **kwargs)
         else:
             raise HTTPException(status_code=500, detail=f"Unsupported HTTP method: {method}")
         
-        # Log response for debugging
-        logger.info(f"Service {service_name} responded with status {response.status_code}")
+        logger.info(f"Incident processor responded with status {response.status_code}")
         
         if response.status_code >= 500:
             raise HTTPException(
                 status_code=502, 
-                detail=f"{service_name} service error: {response.status_code}"
+                detail=f"Incident processor error: {response.status_code}"
             )
         
         return {
@@ -72,28 +78,28 @@ def call_service(service_name: str, endpoint: str, method: str = 'GET', **kwargs
         }
         
     except requests.exceptions.Timeout:
-        logger.error(f"Timeout calling {service_name} service")
+        logger.error("Timeout calling incident processor service")
         raise HTTPException(
             status_code=504, 
-            detail=f"{service_name} service timeout"
+            detail="Incident processor service timeout"
         )
     except requests.exceptions.ConnectionError:
-        logger.error(f"Connection error to {service_name} service")
+        logger.error("Connection error to incident processor service")
         raise HTTPException(
             status_code=503, 
-            detail=f"{service_name} service unavailable"
+            detail="Incident processor service unavailable"
         )
     except Exception as e:
-        logger.error(f"Unexpected error calling {service_name} service: {e}")
+        logger.error(f"Unexpected error calling incident processor: {e}")
         raise HTTPException(
             status_code=500, 
-            detail=f"Internal error calling {service_name} service"
+            detail="Internal error calling incident processor"
         )
 
 @app.get("/health")
 async def health_check() -> Dict[str, Any]:
     """
-    Aggregate health check across all microservices
+    System health check including incident processor service
     """
     health_status = {
         'api_gateway': {
@@ -104,211 +110,244 @@ async def health_check() -> Dict[str, Any]:
     
     overall_healthy = True
     
-    # Check each service health
-    for service_name in SERVICES.keys():
-        try:
-            result = call_service(service_name, '/health', 'GET')
-            health_status[f'{service_name}_service'] = result['data']
-            if not result['success']:
-                overall_healthy = False
-        except Exception as e:
-            health_status[f'{service_name}_service'] = {
-                'status': 'unhealthy',
-                'error': str(e),
-                'timestamp': datetime.now().isoformat()
-            }
+    # Check incident processor health
+    try:
+        result = call_incident_processor('/health', 'GET')
+        health_status['incident_processor'] = result['data']
+        if not result['success']:
             overall_healthy = False
+    except Exception as e:
+        health_status['incident_processor'] = {
+            'status': 'unhealthy',
+            'error': str(e),
+            'timestamp': datetime.now().isoformat()
+        }
+        overall_healthy = False
     
     # Overall system status
     health_status['overall'] = {
         'status': 'healthy' if overall_healthy else 'degraded',
-        'services_count': len(SERVICES),
-        'healthy_services': sum(1 for k, v in health_status.items() 
-                               if k.endswith('_service') and v.get('status') == 'healthy'),
+        'system': 'incident_response',
         'timestamp': datetime.now().isoformat()
     }
     
     status_code = 200 if overall_healthy else 503
     return JSONResponse(content=health_status, status_code=status_code)
 
-@app.post("/upload")
-async def upload_document(file: UploadFile = File(...)) -> Dict[str, Any]:
+@app.post("/chat")
+async def chat_about_policies(request: ChatRequest) -> Dict[str, Any]:
     """
-    Upload document via Document Service
+    Chat endpoint for policy questions and general interaction
     """
-    logger.info(f"Received file upload: {file.filename}")
-    
-    # Validate file type at gateway level
-    if not file.filename.endswith('.txt'):
-        raise HTTPException(
-            status_code=400, 
-            detail="Only .txt files are allowed"
-        )
+    logger.info(f"Processing chat message: {request.message[:50]}...")
     
     try:
-        # Prepare file for forwarding to Document Service
-        files = {'file': (file.filename, await file.read(), file.content_type)}
+        # Determine if this is a transcript or a question
+        message = request.message.strip()
         
-        result = call_service('document', '/upload', 'POST', files=files)
+        # Simple heuristic: if message is very long or contains specific keywords, treat as transcript
+        is_transcript = (
+            len(message) > 500 or  # Long message likely to be transcript
+            any(keyword in message.lower() for keyword in [
+                'transcript', 'telephone call', 'greg jones', 'julie peaterson',
+                'fallen again', 'on the floor', 'living room'
+            ])
+        )
+        
+        if is_transcript:
+            # Process as transcript analysis
+            result = call_incident_processor(
+                '/analyze',
+                'POST',
+                json={'transcript': message}
+            )
+            
+            if result['success']:
+                # Format response for chat interface
+                analysis_data = result['data']['analysis']
+                
+                chat_response = f"""📋 **INCIDENT ANALYSIS**
+
+**Summary:** {analysis_data['analysis']['summary']}
+
+**🚨 TRIGGERED POLICIES:**
+"""
+                
+                for policy in analysis_data['analysis']['triggered_policies']:
+                    chat_response += f"• **{policy['section']}**: {policy['reason']}\n"
+                
+                chat_response += f"""
+**📝 REQUIRED ACTIONS:**
+"""
+                for action in analysis_data['analysis']['required_actions']:
+                    chat_response += f"• {action}\n"
+                
+                chat_response += f"""
+**📋 INCIDENT REPORT GENERATED:**
+```json
+{analysis_data['incident_report']}
+```
+
+**📧 EMAILS GENERATED:**
+"""
+                
+                for email in analysis_data['emails']:
+                    chat_response += f"""
+**To: {email['recipient_type'].title()}**
+Subject: {email['subject']}
+Urgency: {email['urgency'].upper()}
+{email['body'][:200]}...
+---
+"""
+                
+                return {
+                    'success': True,
+                    'message': chat_response,
+                    'type': 'transcript_analysis',
+                    'analysis_data': analysis_data,
+                    'tokens_used': result['data'].get('tokens_used', 0),
+                    'cost': result['data'].get('cost', 0)
+                }
+            else:
+                raise HTTPException(
+                    status_code=result['status_code'],
+                    detail=result['data'].get('error', 'Transcript analysis failed')
+                )
+        
+        else:
+            # Process as policy question
+            result = call_incident_processor(
+                '/chat',
+                'POST',
+                json={'question': message}
+            )
+            
+            if result['success']:
+                return {
+                    'success': True,
+                    'message': result['data']['answer'],
+                    'type': 'policy_question',
+                    'tokens_used': result['data'].get('tokens_used', 0),
+                    'cost': result['data'].get('cost', 0)
+                }
+            else:
+                raise HTTPException(
+                    status_code=result['status_code'],
+                    detail=result['data'].get('error', 'Policy question failed')
+                )
+                
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Chat processing error: {e}")
+        raise HTTPException(status_code=500, detail="Chat processing failed")
+
+@app.post("/analyze")
+async def analyze_transcript(request: TranscriptAnalysisRequest) -> Dict[str, Any]:
+    """
+    Direct transcript analysis endpoint
+    """
+    logger.info(f"Processing transcript analysis: {len(request.transcript)} characters")
+    
+    try:
+        result = call_incident_processor(
+            '/analyze',
+            'POST',
+            json={'transcript': request.transcript}
+        )
         
         if result['success']:
-            logger.info(f"Document uploaded successfully: {result['data'].get('document_id')}")
             return result['data']
         else:
             raise HTTPException(
                 status_code=result['status_code'],
-                detail=result['data'].get('error', 'Upload failed')
+                detail=result['data'].get('error', 'Transcript analysis failed')
             )
             
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Upload processing error: {e}")
-        raise HTTPException(status_code=500, detail="Upload processing failed")
+        logger.error(f"Transcript analysis error: {e}")
+        raise HTTPException(status_code=500, detail="Transcript analysis failed")
 
-@app.post("/ask")
-async def ask_question(request_data: Dict[str, Any]) -> Dict[str, Any]:
+@app.post("/update")
+async def update_documents(request: DocumentUpdateRequest) -> Dict[str, Any]:
     """
-    Orchestrate document Q&A: validate request, then call AI Service
-    This demonstrates microservice orchestration patterns
+    Update generated documents based on user feedback
     """
-    # Request validation
-    document_id = request_data.get('document_id')
-    question = request_data.get('question')
-    
-    if not document_id or not question:
-        raise HTTPException(
-            status_code=400,
-            detail="Both 'document_id' and 'question' are required"
-        )
-    
-    logger.info(f"Processing question for document {document_id}: {question[:50]}...")
+    logger.info(f"Processing document update: {request.document_type}")
     
     try:
-        # Call AI Service (which will internally call Document Service)
-        result = call_service(
-            'ai', 
-            '/ask', 
-            'POST', 
-            json={'document_id': document_id, 'question': question}
+        result = call_incident_processor(
+            '/update',
+            'POST',
+            json={
+                'feedback': request.feedback,
+                'document_type': request.document_type,
+                'current_content': request.current_content,
+                'all_documents': request.all_documents
+            }
         )
-        
-        if result['success']:
-            # Enhance response with gateway metadata
-            response_data = result['data']
-            response_data['processed_by'] = 'api-gateway'
-            response_data['processing_time'] = datetime.now().isoformat()
-            
-            logger.info(f"Question processed successfully. Tokens used: {response_data.get('tokens_used', 'unknown')}")
-            return response_data
-        else:
-            raise HTTPException(
-                status_code=result['status_code'],
-                detail=result['data'].get('error', 'Question processing failed')
-            )
-            
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error(f"Question processing error: {e}")
-        raise HTTPException(status_code=500, detail="Question processing failed")
-
-@app.get("/documents")
-async def list_documents() -> Dict[str, Any]:
-    """
-    List all documents via Document Service
-    """
-    try:
-        result = call_service('document', '/documents', 'GET')
         
         if result['success']:
             return result['data']
         else:
             raise HTTPException(
                 status_code=result['status_code'],
-                detail=result['data'].get('error', 'Failed to list documents')
+                detail=result['data'].get('error', 'Document update failed')
             )
             
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Document listing error: {e}")
-        raise HTTPException(status_code=500, detail="Document listing failed")
-
-@app.get("/models")
-async def list_ai_models() -> Dict[str, Any]:
-    """
-    Get AI model information via AI Service
-    """
-    try:
-        result = call_service('ai', '/models', 'GET')
-        
-        if result['success']:
-            return result['data']
-        else:
-            raise HTTPException(
-                status_code=result['status_code'],
-                detail=result['data'].get('error', 'Failed to get model info')
-            )
-            
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error(f"Model info error: {e}")
-        raise HTTPException(status_code=500, detail="Model info retrieval failed")
+        logger.error(f"Document update error: {e}")
+        raise HTTPException(status_code=500, detail="Document update failed")
 
 @app.get("/")
 async def root() -> Dict[str, Any]:
     """
-    API Gateway information and available endpoints
+    API Gateway information endpoint
     """
     return {
-        'service': 'CareDocQA API Gateway',
+        'service': 'Incident Response API Gateway',
+        'description': 'AI-Enhanced Social Care Incident Response System',
         'version': '1.0.0',
-        'status': 'running',
-        'architecture': 'microservices',
-        'services': {
-            'document_service': SERVICES['document']['url'],
-            'ai_service': SERVICES['ai']['url']
-        },
         'endpoints': {
-            'upload': 'POST /upload - Upload healthcare documents',
-            'ask': 'POST /ask - Ask questions about documents',
-            'documents': 'GET /documents - List all documents',
-            'models': 'GET /models - Get AI model information',
-            'health': 'GET /health - System health status',
-            'docs': 'GET /docs - Interactive API documentation'
+            '/health': 'System health check',
+            '/chat': 'Chat about policies or analyze transcripts',
+            '/analyze': 'Direct transcript analysis',
+            '/update': 'Update generated documents',
+            '/docs': 'API documentation'
         },
+        'features': [
+            'Policy-driven incident analysis',
+            'Automated form generation',
+            'Email drafting for required notifications',
+            'Natural language policy Q&A',
+            'Document editing with cross-document consistency'
+        ],
         'timestamp': datetime.now().isoformat()
     }
 
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request, exc):
     """
-    Global exception handler for consistent error responses
+    Custom HTTP exception handler with structured error responses
     """
     return JSONResponse(
         status_code=exc.status_code,
         content={
             'success': False,
             'error': exc.detail,
-            'timestamp': datetime.now().isoformat(),
-            'gateway': 'api-gateway'
+            'status_code': exc.status_code,
+            'timestamp': datetime.now().isoformat()
         }
     )
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     import uvicorn
+    print("🌐 Starting Incident Response API Gateway...")
+    print("🚀 Gateway running on http://localhost:8000")
+    print("📚 API docs available at http://localhost:8000/docs")
     
-    # Validate service configuration
-    for service_name, config in SERVICES.items():
-        logger.info(f"Configured {service_name} service: {config['url']}")
-    
-    # Run FastAPI with uvicorn
-    uvicorn.run(
-        "app:app", 
-        host="0.0.0.0", 
-        port=8000, 
-        reload=True,
-        log_level="info"
-    ) 
+    uvicorn.run(app, host='0.0.0.0', port=8000, log_level='info') 
